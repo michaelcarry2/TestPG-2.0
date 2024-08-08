@@ -64,17 +64,18 @@ export class DataTableComponent implements OnInit {
     this.editUser.emit(user);
   }
 
-  //ผมได้พยายามลอง update ในรูปแบบที่ เคยบอกไว้แล้ว แต่ผมไม่รู้วิธี ทำยังไงให้มัน update จริงๆครับ ผมอาจจะทำพลาดตรงไหนตั้งแต่แรก แต่ผมพยายามหาหลายๆทางแล้ว
-  // ก็ยังไม่ได้เลย ถ้าหากแนะนำได้จะขอบคุณมากครับ ผมไม่ชัวร์เลยว่าต้องทำแบบไหน update แบบ ที่โจทย์บอกให้เปลี่ยนแค่ตรงหน้าจอ
-  updateData(updatedData: IUser[]): void {
-    this.http.put<IUser[]>('assets/sample-data.json', updatedData).subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-        console.log('ข้อมูลถูกอัปเดตเรียบร้อยแล้ว');
-      },
-      error: (err) => {
-        console.error('เกิดข้อผิดพลาดในการอัปเดตข้อมูล', err);
-      },
-    });
+  //  ผมได้พยายามลอง update ในรูปแบบที่ เคยบอกไว้แล้ว แต่ผมไม่รู้วิธี ทำยังไงให้มัน update จริงๆครับ ผมอาจจะทำพลาดตรงไหนตั้งแต่แรก แต่ผมพยายามหาหลายๆทางแล้ว 
+  //  ก็ยังไม่ได้เลย ถ้าหากแนะนำได้จะขอบคุณมากครับ ผมไม่ชัวร์เลยว่าต้องทำแบบไหน update แบบ ที่โจทย์บอกให้เปลี่ยนแค่ตรงหน้าจอ
+  updateData(updatedUser: IUser): void {
+    const index = this.dataSource.data.findIndex(
+      (user) => user.id === updatedUser.id
+    );
+    if (index !== -1) {
+      this.dataSource.data[index] = updatedUser;
+      this.dataSource.data = [...this.dataSource.data]; // Refresh the dataSource
+      console.log('ข้อมูลถูกอัปเดตเรียบร้อยแล้ว');
+    } else {
+      console.error('ไม่พบผู้ใช้ที่ต้องการอัปเดต');
+    }
   }
 }
