@@ -1,0 +1,87 @@
+<form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+  <div>
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Firstname</mat-label>
+        <input matInput type="text" formControlName="firstname" />
+        <mat-error
+          *ngIf="
+            userForm.get('firstname')?.hasError('required') &&
+            userForm.get('firstname')?.touched
+          "
+        >
+          First name is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Lastname</mat-label>
+        <input matInput type="text" formControlName="lastname" />
+        <mat-error
+          *ngIf="
+            userForm.get('lastname')?.hasError('required') &&
+            userForm.get('lastname')?.touched
+          "
+        >
+          Last name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option *ngFor="let gender of genders" [value]="gender.value">
+            {{ gender.viewValue }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            userForm.get('gender')?.hasError('required') &&
+            userForm.get('gender')?.touched
+          "
+        >
+          Gender is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Score</mat-label>
+        <input matInput type="number" formControlName="score" />
+        <mat-error
+          *ngIf="
+            userForm.get('score')?.hasError('required') &&
+            userForm.get('score')?.touched
+          "
+        >
+          Score is required
+        </mat-error>
+        <mat-error
+          *ngIf="
+            userForm.get('score')?.hasError('min') &&
+            userForm.get('score')?.touched
+          "
+        >
+          Minimum is 0
+        </mat-error>
+        <mat-error
+          *ngIf="
+            userForm.get('score')?.hasError('max') &&
+            userForm.get('score')?.touched
+          "
+        >
+          Maximum is 100
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <button mat-flat-button color="primary" type="submit">
+        {{ isEditMode ? "Edit" : "Add" }}
+      </button>
+      <button mat-stroked-button type="button" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</form>
+<app-data-table (editUser)="onEdit($event)"></app-data-table>
