@@ -7,7 +7,7 @@ import { IUser } from './Interfaces/user.interface';
   providedIn: 'root',
 })
 export class DataService {
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrl = 'http://localhost:3000/';
 
   constructor(private http: HttpClient) {}
 
