@@ -7,12 +7,12 @@ import { IUser } from './Interfaces/user.interface';
   providedIn: 'root',
 })
 export class DataService {
-  private apiUrl = 'http://localhost:3000/';
+  private apiUrl = 'http://localhost:3000/users';
 
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<IUser[]> {
-    return this.http.get<IUser[]>(`${this.apiUrl}`);
+    return this.http.get<IUser[]>(this.apiUrl);
   }
 
   updateUser(userId: number, updatedData: IUser): Observable<IUser> {

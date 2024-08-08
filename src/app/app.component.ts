@@ -14,13 +14,8 @@ import {
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { DataTableComponent } from './data-table/data-table.component';
-import { DataService } from './data.service'; // Import the service
+import { DataService } from './data.service';
 import { IUser } from './Interfaces/user.interface';
-
-interface Gender {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-root',
@@ -74,9 +69,16 @@ export class AppComponent implements OnInit {
     if (this.userForm.valid) {
       const formData: IUser = this.userForm.value;
       if (this.isEditMode && this.editingUser) {
-        // เรียกใช้งานฟังก์ชัน updateData
-        this.updateData(this.editingUser.id, formData);
-        this.resetForm(); // รีเซ็ตฟอร์มหลังการอัปเดต
+        this.dataService.updateUser(this.editingUser.id, formData).subscribe({
+          next: (data: IUser) => {
+            console.log('ข้อมูลได้รับการอัปเดตเรียบร้อยแล้ว', data);
+            this.dataTableComponent.updateData(data);
+            this.resetForm();
+          },
+          error: (error: any) => {
+            console.error('เกิดข้อผิดพลาดในการอัปเดตข้อมูล:', error);
+          },
+        });
       }
     } else {
       this.userForm.markAllAsTouched();
@@ -95,23 +97,12 @@ export class AppComponent implements OnInit {
   }
 
   matchGender(gender: string): string {
-    let n: string;
-
-    switch (gender) {
-      case 'M':
-        n = 'Male';
-        break;
-      case 'F':
-        n = 'Female';
-        break;
-      case 'U':
-        n = 'Unknown';
-        break;
-      default:
-        n = '';
-    }
-
-    return n;
+    const genderMap: { [key: string]: string } = {
+      M: 'Male',
+      F: 'Female',
+      U: 'Unknown',
+    };
+    return genderMap[gender] || '';
   }
 
   onCancel(): void {
@@ -122,19 +113,5 @@ export class AppComponent implements OnInit {
     this.userForm.reset();
     this.isEditMode = false;
     this.editingUser = null;
-  }
-
-  updateData(userId: number, updatedData: IUser): void {
-    this.dataService.updateUser(userId, updatedData).subscribe({
-      next: (data) => {
-        // แสดง log ที่ข้อมูลถูกอัปเดตแล้ว
-        console.log('ข้อมูลถูกอัปเดตเรียบร้อยแล้ว:', data);
-        // อัปเดตตารางข้อมูลใน DataTableComponent
-        this.dataTableComponent.updateData(data);
-      },
-      error: (err) => {
-        console.error('เกิดข้อผิดพลาดในการอัปเดตข้อมูล:', err);
-      },
-    });
   }
 }
