@@ -38,6 +38,7 @@ import { IUser } from './Interfaces/user.interface';
 export class AppComponent implements OnInit {
   title = 'TestPG';
   @ViewChild(DataTableComponent) dataTableComponent!: DataTableComponent;
+  @ViewChild(DataTableComponent) dataTableComponent!: DataTableComponent;
 
   userForm: FormGroup;
 
@@ -113,5 +114,16 @@ export class AppComponent implements OnInit {
     this.userForm.reset();
     this.isEditMode = false;
     this.editingUser = null;
+  }
+
+  updateData(userId: number, updatedData: IUser): void {
+    this.dataService.updateUser(userId, updatedData).subscribe({
+      next: (data) => {
+        console.log('ข้อมูลถูกอัปเดตเรียบร้อยแล้ว:', data);
+      },
+      error: (err) => {
+        console.error('เกิดข้อผิดพลาดในการอัปเดตข้อมูล:', err);
+      },
+    });
   }
 }
