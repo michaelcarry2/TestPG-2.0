@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -42,6 +42,7 @@ interface Gender {
 })
 export class AppComponent implements OnInit {
   title = 'TestPG';
+  @ViewChild(DataTableComponent) dataTableComponent!: DataTableComponent;
 
   userForm: FormGroup;
 
@@ -71,7 +72,12 @@ export class AppComponent implements OnInit {
 
   onFormSubmit() {
     if (this.userForm.valid) {
-      const formData = this.userForm.value;
+      const formData: IUser = this.userForm.value;
+      if (this.isEditMode && this.editingUser) {
+        // เรียกใช้งานฟังก์ชัน updateData
+        this.updateData(this.editingUser.id, formData);
+        this.resetForm(); // รีเซ็ตฟอร์มหลังการอัปเดต
+      }
     } else {
       this.userForm.markAllAsTouched();
     }
@@ -121,7 +127,10 @@ export class AppComponent implements OnInit {
   updateData(userId: number, updatedData: IUser): void {
     this.dataService.updateUser(userId, updatedData).subscribe({
       next: (data) => {
+        // แสดง log ที่ข้อมูลถูกอัปเดตแล้ว
         console.log('ข้อมูลถูกอัปเดตเรียบร้อยแล้ว:', data);
+        // อัปเดตตารางข้อมูลใน DataTableComponent
+        this.dataTableComponent.updateData(data);
       },
       error: (err) => {
         console.error('เกิดข้อผิดพลาดในการอัปเดตข้อมูล:', err);
