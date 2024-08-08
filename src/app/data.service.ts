@@ -9,6 +9,8 @@ import { IUser } from './Interfaces/user.interface';
 export class DataService {
   private apiUrl = 'http://localhost:3000/users';
 
+  //Json Server
+
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<IUser[]> {
