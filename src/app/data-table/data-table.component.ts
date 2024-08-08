@@ -64,6 +64,8 @@ export class DataTableComponent implements OnInit {
     this.editUser.emit(user);
   }
 
+  //ผมได้พยายามลอง update ในรูปแบบที่ เคยบอกไว้แล้ว แต่ผมไม่รู้วิธี ทำยังไงให้มัน update จริงๆครับ ผมอาจจะทำพลาดตรงไหนตั้งแต่แรก แต่ผมพยายามหาหลายๆทางแล้ว
+  // ก็ยังไม่ได้เลย ถ้าหากแนะนำได้จะขอบคุณมากครับ ผมไม่ชัวร์เลยว่าต้องทำแบบไหน update แบบ ที่โจทย์บอกให้เปลี่ยนแค่ตรงหน้าจอ
   updateData(updatedData: IUser[]): void {
     this.http.put<IUser[]>('assets/sample-data.json', updatedData).subscribe({
       next: (data) => {
