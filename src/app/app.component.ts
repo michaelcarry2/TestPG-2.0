@@ -38,7 +38,6 @@ import { IUser } from './Interfaces/user.interface';
 export class AppComponent implements OnInit {
   title = 'TestPG';
   @ViewChild(DataTableComponent) dataTableComponent!: DataTableComponent;
-  @ViewChild(DataTableComponent) dataTableComponent!: DataTableComponent;
 
   userForm: FormGroup;
 
